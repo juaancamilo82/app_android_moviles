@@ -13,7 +13,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
     }
 
-    fun irAlRegistro(v:View){
+    fun irAlRegistro(v:View){ //Se abre la ventana de Registro
         val intent = Intent(this, RegisroActivity::class.java)
         startActivity(intent)
     }
