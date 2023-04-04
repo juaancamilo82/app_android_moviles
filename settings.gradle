@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Unilocal"
+rootProject.name = "My Application"
 include ':app'

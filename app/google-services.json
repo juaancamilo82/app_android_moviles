@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "581487275630",
+    "project_id": "unilocal-33967",
+    "storage_bucket": "unilocal-33967.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581487275630:android:e43e681ed6a9102e34807f",
+        "android_client_info": {
+          "package_name": "co.edu.eam.unilocal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581487275630-5ocgi8eeucm9p1mfd36ibvetblk062qq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPeMRBhPk9KHCPIjcdTR84rX1IhMNlnZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "581487275630-5ocgi8eeucm9p1mfd36ibvetblk062qq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
