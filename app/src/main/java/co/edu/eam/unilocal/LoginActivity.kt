@@ -28,7 +28,9 @@ class LoginActivity : AppCompatActivity() {
                     Usuario.email.equals(email) && Usuario.password.equals(password)
                 }
                 if(usuario!=null){
-                    Toast.makeText(this, "éxito!!!!!!!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, InterfazUsuario::class.java)
+                    intent.putExtra("email", usuario.email.toString())
+                    startActivity(intent)
                 }else{
                     Toast.makeText(this, "No se encontró el usuario", Toast.LENGTH_SHORT).show()
                 }
