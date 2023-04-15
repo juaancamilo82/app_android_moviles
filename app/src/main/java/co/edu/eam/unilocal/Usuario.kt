@@ -9,5 +9,6 @@ class Usuario (nombre: String, email:String, password:String, foto: Bitmap?) {
     var email: String = email
     var password: String = password
     var foto: Bitmap? = foto
-//hola perrita
+//hola perritaaaaaa
+    // farandulera
 }
