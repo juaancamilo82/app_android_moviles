@@ -10,10 +10,12 @@
         android:id="@+id/btnRegistrar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="36dp"
         android:backgroundTint="#E8DEF8"
         android:backgroundTintMode="add"
         android:foregroundTint="#000000"
+        android:inputType="textEmailAddress"
+        android:onClick="registrarUsuario"
         android:text="Registrarse"
         android:textAllCaps="false"
         android:textColor="#000000"
@@ -23,10 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
         app:rippleColor="#E8DEF8"
-        app:strokeColor="#000000"
-        android:inputType="textEmailAddress"
-        android:onClick="registrarUsuario"
-        />
+        app:strokeColor="#000000" />
 
     <ImageView
         android:id="@+id/imageView2"
