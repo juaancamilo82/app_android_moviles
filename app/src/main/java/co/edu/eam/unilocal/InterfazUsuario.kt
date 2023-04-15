@@ -35,7 +35,6 @@ class InterfazUsuario : AppCompatActivity() {
             return null
         }
     }
-
     private fun cargarDatosUsuario(){
         val usuario = buscarUsuario()
         val nombreVista: TextView = findViewById(R.id.nombreUsuario)

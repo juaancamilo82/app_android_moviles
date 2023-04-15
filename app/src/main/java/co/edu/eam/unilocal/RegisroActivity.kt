@@ -8,6 +8,7 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -82,6 +83,7 @@ class RegisroActivity : AppCompatActivity() {
     }
     fun registrarUsuario(v: View) {
         val usuarios = ArrayUsuario.getInstance().myArrayList
+
         val nombre: TextInputEditText = findViewById(R.id.nombres)
         val email: TextInputEditText = findViewById(R.id.emailLR)
         val password: TextInputEditText = findViewById(R.id.passR)
@@ -97,8 +99,7 @@ class RegisroActivity : AppCompatActivity() {
                             val nuevoUsuario = Usuario(
                                 nombre.text.toString(),
                                 email.text.toString(),
-                                password.text.toString(),
-                                null
+                                password.text.toString()
                             )
                             usuarios.add(nuevoUsuario)
                             Toast.makeText(this, "Usuario registrado con éxito", Toast.LENGTH_SHORT)
