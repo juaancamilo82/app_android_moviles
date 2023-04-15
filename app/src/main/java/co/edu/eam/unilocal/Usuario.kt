@@ -13,4 +13,10 @@ class Usuario (nombre: String, email:String, password:String, foto: Bitmap?) {
     // ensasyo 2
 //hola perritaaaaaa
     // farandulera
+
+
+    //jejejejej
+    //jajajaja
+    //hpta
+
 }
