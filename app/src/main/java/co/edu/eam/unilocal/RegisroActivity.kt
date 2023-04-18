@@ -99,7 +99,7 @@ class RegisroActivity : AppCompatActivity() {
                             val nuevoUsuario = Usuario(
                                 nombre.text.toString(),
                                 email.text.toString(),
-                                password.text.toString()
+                                password.text.toString(),null
                             )
                             usuarios.add(nuevoUsuario)
                             Toast.makeText(this, "Usuario registrado con éxito", Toast.LENGTH_SHORT)
