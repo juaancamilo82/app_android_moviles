@@ -20,7 +20,9 @@ class LoginActivity : AppCompatActivity() {
         val nuevoUsuario = Usuario(
             "Steven Cardona",
             "1",
-            "1",null
+            "1",null,
+            null,
+            null
         )
         usuarios.add(nuevoUsuario)
 
@@ -28,10 +30,11 @@ class LoginActivity : AppCompatActivity() {
             Usuario(
                 "Vanessa Valencia",
                 "2",
-                "2",null
+                "2",null,
+                null,
+                null
             )
         usuarios.add(nuevoUsuario2)
-
     }
 
     fun irAlRegistro(v: View) {
@@ -48,10 +51,9 @@ class LoginActivity : AppCompatActivity() {
                 }
                 if(usuario!=null){
                     val lugar = buscarLugar()
-                    val intent = Intent(this, InterfazUsuario::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     intent.putExtra("email", usuario.email.toString())
                     intent.putExtra("nombreLugar", lugar?.nombre.toString())
-
                     startActivity(intent)
                 }else{
                     Toast.makeText(this, "No se encontró el usuario", Toast.LENGTH_SHORT).show()

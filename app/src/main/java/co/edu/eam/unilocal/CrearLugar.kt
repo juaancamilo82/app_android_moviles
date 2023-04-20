@@ -15,7 +15,6 @@ class CrearLugar : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_lugar)
     }
-
  fun registrarLugar(v: View) {
      val lugares = ArrayLugares.getInstance().myArrayList
 
@@ -46,13 +45,12 @@ class CrearLugar : AppCompatActivity() {
          editarLugaresRegistrados(nuevoLugar)
          Toast.makeText(this, "Lugar registrado con éxito", Toast.LENGTH_SHORT)
              .show()
-         abrirInterfazUsuario(nuevoLugar)
+         abrirMain()
      } else {
          Toast.makeText(this, "Debes llenar todos los campos", Toast.LENGTH_SHORT)
              .show()
      }
  }
-
      private fun buscarUsuario(): Usuario? {
          val email = intent.getStringExtra("email")
          val listaUsuarios = ArrayUsuario.getInstance().myArrayList
@@ -65,33 +63,23 @@ class CrearLugar : AppCompatActivity() {
              return null
          }
      }
-
     private fun editarLugaresRegistrados(lugar: Lugar) {
         val usuario = buscarUsuario()
         val listaLugares = usuario?.lugaresRegistrados
         listaLugares?.let {
-            if(listaLugares==null){
-                listaLugares.set(0, lugar)
-            }
+                val indice = listaLugares.indexOf(lugar)
+                if (indice != -1) {
+                    listaLugares.set(indice+1, lugar)
+                }else{
+                    listaLugares.set(0, lugar)
+                }
         }
     }
-    private fun abrirInterfazUsuario(lugar:Lugar){
+    private fun abrirMain(){
         val usuario = buscarUsuario()
-        val lugar=buscarLugar(lugar)
-        val intent = Intent(this, InterfazUsuario::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         val correo = usuario?.email.toString()
-        val nombreLugar = lugar?.nombre.toString()
         intent.putExtra("email", correo)
-        intent.putExtra("nombreLugar", nombreLugar)
         startActivity(intent)
     }
-    private fun buscarLugar(lugar:Lugar): Lugar?{
-        val nombreLugar = lugar.nombre
-        val listaLugares = ArrayLugares.getInstance().myArrayList
-        val lugar = listaLugares.find { Lugar ->
-            Lugar.nombre.equals(nombreLugar)
-        }
-        return lugar
-    }
-
 }
