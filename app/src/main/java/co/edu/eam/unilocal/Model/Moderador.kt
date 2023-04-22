@@ -1,4 +1,7 @@
-package co.edu.eam.unilocal
+package co.edu.eam.unilocal.Model
+
+import co.edu.eam.unilocal.Model.Lugar
+import co.edu.eam.unilocal.Model.Usuario
 
 class Moderador(nombre: String, email: String, password: String, lugaresRegistrados: ArrayList<Lugar>?,
                 lugaresGuardados: ArrayList<Lugar>?, lugaresFavoritos: ArrayList<Lugar>?,

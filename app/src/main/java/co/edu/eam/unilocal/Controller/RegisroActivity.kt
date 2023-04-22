@@ -1,4 +1,4 @@
-package co.edu.eam.unilocal
+package co.edu.eam.unilocal.Controller
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +8,12 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import co.edu.eam.unilocal.Model.ArrayUsuario
+import co.edu.eam.unilocal.R
+import co.edu.eam.unilocal.Model.Usuario
 import com.google.android.material.textfield.TextInputEditText
 
 class RegisroActivity : AppCompatActivity() {

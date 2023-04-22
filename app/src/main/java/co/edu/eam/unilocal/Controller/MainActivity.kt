@@ -1,11 +1,13 @@
-package co.edu.eam.unilocal
+package co.edu.eam.unilocal.Controller
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
-import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,8 +16,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import co.edu.eam.unilocal.Model.*
+import co.edu.eam.unilocal.R
 import co.edu.eam.unilocal.databinding.ActivityMainBinding
-import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,15 +36,15 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.editarPerfil, R.id.cerrarSesion
+                R.id.nav_home, R.id.editarPerfil, R.id.lugaresRegistrados, R.id.cerrarSesion
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         verificarSesion(navView.menu, navView)
-
-
+        cargarDatos()
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main2_drawer, menu)
         return true
@@ -51,20 +54,25 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-    fun verificarSesion(menu:Menu, menuLateral:NavigationView){
+
+    fun verificarSesion(menu: Menu, menuLateral: NavigationView) {
 
         val cerrarSesionItem = menu.findItem(R.id.cerrarSesion)
-        val LogOrHome =  menu.findItem(R.id.nav_home)
+        val LogOrHome = menu.findItem(R.id.nav_home)
         val editOrRegister = menu.findItem(R.id.editarPerfil)
-        val nombreUsuario = menuLateral.getHeaderView(0).findViewById<TextView>(R.id.txtNombreUsuario)
-        val usuario = buscarUsuario()
+        val lugaresRegistrados = menu.findItem(R.id.lugaresRegistrados)
+        val nombreUsuario =
+            menuLateral.getHeaderView(0).findViewById<TextView>(R.id.txtNombreUsuario)
+        val sesion = getSesion()
 
-        if(usuario!=null){
-            nombreUsuario.setText(usuario.nombre.toString())
-            LogOrHome?.setTitle("Home")
-            editOrRegister?.setTitle("Editar perfil")
-
-        }else{
+        if (sesion != null) {
+            nombreUsuario.setText(sesion.usuario.nombre.toString())
+            cerrarSesionItem.setOnMenuItemClickListener {
+                cerrarSesion()
+                true
+            }
+        } else {
+            lugaresRegistrados.setVisible(false)
             nombreUsuario?.setText("Inicia sesión para acceder a todas las funciones")
             LogOrHome?.setTitle("Iniciar sesión")
             LogOrHome?.setOnMenuItemClickListener {
@@ -82,6 +90,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun cerrarSesion() {
+        var sesion = getSesion()
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirmación")
+        builder.setMessage("¿Estás seguro de que deseas cerrar sesión?")
+        builder.setPositiveButton("Sí") { dialog, which ->
+            ArraySesiones.getInstance().myArrayList.remove(sesion)
+            reiniciarActivity()
+        }
+        builder.setNegativeButton("No") { dialog, which ->
+        }
+        builder.show()
+    }
 
     private fun buscarUsuario(): Usuario? {
         val email = intent.getStringExtra("email")
@@ -96,6 +117,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getSesion(): Sesion? {
+        val emailSesion = intent.getStringExtra("email")
+        val listaSesiones = ArraySesiones.getInstance().myArrayList
+        val sesion = listaSesiones.find { Sesion ->
+            Sesion.usuario.email.equals(emailSesion)
+        }
+        return sesion
+    }
+
+    private fun reiniciarActivity() {
+        finish()
+        startActivity(intent)
+    }
+
+    private fun cargarDatos(){
+        val sesion = getSesion()
+        val lugares = sesion?.usuario?.lugaresRegistrados
+        val fotosLugares = lugares?.get(0)?.fotos?.get(0)
+        val foto1 = findViewById<ImageView>(R.id.image1Place)
+
+        if(foto1!=null && fotosLugares!=null && lugares!=null && sesion!=null){
+            foto1.setImageURI(fotosLugares)
+        }
+    }
+
     private fun buscarLugar(): Lugar? {
         val nombreLugar = intent.getStringExtra("nombreLugar")
         val listaLugares = ArrayLugares.getInstance().myArrayList
@@ -105,36 +151,23 @@ class MainActivity : AppCompatActivity() {
         return lugar
     }
 
-    private fun cargarDatosUsuario() {
-        val usuario = buscarUsuario()
-        //val nombreVista: TextView = findViewById(R.id.nombreUsuario)
-        //nombreVista.text = usuario?.nombre.toString()
-    }
-
-    fun cargarDatosLugares() {
-        val lugar = buscarLugar()
-        // val nombreVista: TextView = findViewById(R.id.nombreLugarText)
-        //nombreVista.text = lugar?.nombre.toString()
-    }
-
     fun irAlRegistro() {
         val intent = Intent(this, RegisroActivity::class.java)
         startActivity(intent)
     }
 
-    fun irAlLogin(){
+    fun irAlLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
+
     fun abrirVentanaRegistroLugar(v: View) {
-        val usuario = buscarUsuario()
-        if (usuario != null) {
+        val sesion = getSesion()
+        if (sesion != null) {
             val intent = Intent(this, CrearLugar::class.java)
-            val correo = usuario?.email.toString()
-            if (usuario != null) {
-                intent.putExtra("email", correo)
-                startActivity(intent)
-            }
+            val correo: String = sesion.usuario.email.toString()
+            intent.putExtra("email", correo)
+            startActivity(intent)
         } else {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)

@@ -1,4 +1,4 @@
-package co.edu.eam.unilocal
+package co.edu.eam.unilocal.Model
 
 class ArrayLugares {
 

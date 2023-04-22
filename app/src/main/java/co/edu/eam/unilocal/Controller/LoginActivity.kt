@@ -1,13 +1,13 @@
-package co.edu.eam.unilocal
+package co.edu.eam.unilocal.Controller
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.textfield.TextInputEditText
+import co.edu.eam.unilocal.Model.*
+import co.edu.eam.unilocal.R
 
 class LoginActivity : AppCompatActivity() {
 
@@ -21,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, RegisroActivity::class.java)
         startActivity(intent)
     }
+
     fun loguear(v: View) {
             val listaUsuarios = ArrayUsuario.getInstance().myArrayList
             if(listaUsuarios!=null){
@@ -31,6 +32,11 @@ class LoginActivity : AppCompatActivity() {
                     Usuario.email.equals(email) && Usuario.password.equals(password)
                 }
                 if(usuario!=null){
+
+                    val listaSesiones = ArraySesiones.getInstance().myArrayList
+                    val sesion = Sesion(usuario)
+                    listaSesiones.add(sesion)
+
                     if(usuario is Moderador){
                         val lugar = buscarLugar()
                         val intent = Intent(this, MainActivity::class.java)

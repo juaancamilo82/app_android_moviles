@@ -1,4 +1,4 @@
-package co.edu.eam.unilocal.ui.gallery
+package co.edu.eam.unilocal.View.gallery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import co.edu.eam.unilocal.Model.ArraySesiones
+import co.edu.eam.unilocal.Model.Sesion
+import co.edu.eam.unilocal.View.home.HomeFragment
 import co.edu.eam.unilocal.databinding.FragmentGalleryBinding
 
-class GalleryFragment : Fragment() {
+class GalleryFragment : Fragment()  {
+
 
     private var _binding: FragmentGalleryBinding? = null
 
@@ -39,4 +43,6 @@ class GalleryFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }

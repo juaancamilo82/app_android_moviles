@@ -1,4 +1,4 @@
-package co.edu.eam.unilocal.ui.home
+package co.edu.eam.unilocal.View.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

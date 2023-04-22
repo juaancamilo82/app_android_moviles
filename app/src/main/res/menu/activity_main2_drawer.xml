@@ -11,14 +11,17 @@
         <item
             android:id="@+id/editarPerfil"
             android:icon="@drawable/baseline_settings_24"
-            android:title="Editar perfil"
+            android:title="Configuración del perfil"
             />
         <item
-            android:id="@+id/CerrarSesión"
+            android:id="@+id/lugaresRegistrados"
+            android:icon="@drawable/baseline_place_24"
+            android:title="Mis lugares registrados"
+            />
+        <item
+            android:id="@+id/cerrarSesion"
             android:icon="@drawable/baseline_logout_24"
             android:title="Cerrar sesión"
             />
-
-
     </group>
 </menu>

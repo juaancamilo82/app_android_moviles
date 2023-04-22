@@ -4,17 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CrearLugar">
-
+    tools:context=".Controller.CrearLugar">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="400dp"
+        android:layout_height="377dp"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-83dp">
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="-12dp">
 
         <TextView
             android:id="@+id/textView"
@@ -71,7 +70,7 @@
         android:id="@+id/btnRegistrarLugar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="542dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="#E8DEF8"
         android:backgroundTintMode="add"
         android:foregroundTint="#000000"
@@ -81,10 +80,10 @@
         android:textAllCaps="false"
         android:textColor="#000000"
         app:iconTint="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout"
         app:rippleColor="#E8DEF8"
         app:strokeColor="#000000" />
 
@@ -97,6 +96,58 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="NotSibling" />
+
+    <ImageView
+        android:id="@+id/btnSubFoto2"
+        android:layout_width="120dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistrarLugar"
+        app:layout_constraintStart_toEndOf="@+id/btnSubFoto1"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/baseline_add_a_photo_24" />
+
+    <ImageView
+        android:id="@+id/btnSubFoto3"
+        android:layout_width="120dp"
+        android:layout_height="110dp"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistrarLugar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.279"
+        app:layout_constraintStart_toEndOf="@+id/btnSubFoto2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/baseline_add_a_photo_24" />
+
+    <ImageView
+        android:id="@+id/btnSubFoto1"
+        android:layout_width="120dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistrarLugar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/baseline_add_a_photo_24" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Sube algunas fotos del lugar"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubFoto1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

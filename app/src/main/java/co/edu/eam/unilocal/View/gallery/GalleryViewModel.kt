@@ -1,4 +1,4 @@
-package co.edu.eam.unilocal.ui.gallery
+package co.edu.eam.unilocal.View.gallery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
