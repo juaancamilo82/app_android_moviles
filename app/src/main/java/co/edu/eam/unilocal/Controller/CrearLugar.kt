@@ -140,8 +140,7 @@ class CrearLugar : AppCompatActivity() {
              val nuevoLugar = Lugar(
                  nombre.text.toString(), categoria.text.toString(),
                  direccion.text.toString(), referencia.text.toString(), horario.text.toString(),
-                 telStr.toLong(), correoUsuario,
-                 false,listaImagenes
+                 telStr.toLong(), correoUsuario,listaImagenes
              )
              lugares.add(nuevoLugar)
              editarLugaresRegistrados(nuevoLugar)

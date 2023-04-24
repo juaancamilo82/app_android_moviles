@@ -16,5 +16,13 @@ open class Usuario (nombre: String, email:String, password:String, lugaresRegist
         }
         lugaresRegistrados?.add(lugar)
     }
+
+    fun agregarLugarFavorito(lugar: Lugar) {
+        if (lugaresFavoritos == null) {
+            lugaresFavoritos = ArrayList()
+        }
+        lugaresFavoritos?.add(lugar)
+    }
+
 }
 

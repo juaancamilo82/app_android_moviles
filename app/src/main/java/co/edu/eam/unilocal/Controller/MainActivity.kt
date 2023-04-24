@@ -20,11 +20,13 @@ import androidx.appcompat.app.AppCompatActivity
 import co.edu.eam.unilocal.Model.*
 import co.edu.eam.unilocal.R
 import co.edu.eam.unilocal.databinding.ActivityMainBinding
+import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private var posicionActual = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,9 +46,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         verificarSesion(navView.menu, navView)
 
-        val size = getSesion()?.usuario?.lugaresRegistrados?.size
-        Toast.makeText(this, size.toString(), Toast.LENGTH_SHORT)
-            .show()
+        cargarElementos(posicionActual)
 
     }
 
@@ -58,6 +58,87 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+    private fun cargarElementos(indice:Int) {
+
+        val listaLugares = ArrayLugaresAutorizados.getInstance().myArrayList
+        val size = listaLugares.size
+        val img1 = findViewById<ImageView>(R.id.imgLugar1)
+        val img2 = findViewById<ImageView>(R.id.imgLugar2)
+        val img3 = findViewById<ImageView>(R.id.imgLugar3)
+        val btnSiguiente = findViewById<ImageView>(R.id.btnNext)
+        val btnAnterior = findViewById<ImageView>(R.id.btnBefore)
+        val nombreLugarTxt = findViewById<TextView>(R.id.nombretxtlugar)
+
+        if (size == 0) {
+            img1.setVisibility(View.GONE)
+            img2.setVisibility(View.GONE)
+            img3.setVisibility(View.GONE)
+            btnSiguiente.setVisibility(View.GONE)
+            nombreLugarTxt.setVisibility(View.GONE)
+            btnAnterior.setVisibility(View.GONE)
+
+        } else {
+                val imgUri1 = listaLugares.get(indice)?.fotos?.get(0)
+                val imgUri2 = listaLugares.get(indice)?.fotos?.get(1)
+                val imgUri3 = listaLugares.get(indice)?.fotos?.get(2)
+                val nombreLugar = listaLugares.get(indice)?.nombre
+                img1.setImageURI(imgUri1)
+                img2.setImageURI(imgUri2)
+                img3.setImageURI(imgUri3)
+                nombreLugarTxt.setText(nombreLugar.toString())
+        }
+    }
+    private fun getLugarAutorizado(): Lugar? {
+        val nombre = ArrayLugaresAutorizados.getInstance().myArrayList.get(posicionActual).nombre
+        val listaLugaresAutorizados = ArrayLugaresAutorizados.getInstance().myArrayList
+        val lugarAutorizado = listaLugaresAutorizados.find { LugaresAutorizados ->
+            LugaresAutorizados.nombre.equals(nombre)
+        }
+        return if(lugarAutorizado!=null){
+            lugarAutorizado
+        }else{
+            null
+        }
+    }
+    fun abrirInfoLugar(V: View){
+        val lugar = getLugarAutorizado()
+        val email = getSesion()?.usuario?.email
+        val indice = posicionActual
+        if(lugar!=null){
+            val intent = Intent(this, Info_Lugar_Activity::class.java)
+            val nombre = lugar?.nombre.toString()
+            intent.putExtra("nombreLugar", nombre)
+            intent.putExtra("email", email)
+            intent.putExtra("indice", indice)
+
+
+            startActivity(intent)
+        }
+    }
+
+    fun lugarSiguiente2(V: View) {
+
+        val listaLugares =  ArrayLugaresAutorizados.getInstance().myArrayList
+        val size = listaLugares.size
+
+        if (size != null && size > 1) {
+            posicionActual = (posicionActual + 1) % size
+            cargarElementos(posicionActual)
+        }
+    }
+
+    fun lugarAnterior2(V: View) {
+
+        val listaLugares =  ArrayLugaresAutorizados.getInstance().myArrayList
+        val size = listaLugares.size
+
+        if (size != null && size > 1) {
+            posicionActual = (posicionActual - 1 + size) % size
+            cargarElementos(posicionActual)
+        }
+    }
+
     fun verificarSesion(menu: Menu, menuLateral: NavigationView) {
 
         val cerrarSesionItem = menu.findItem(R.id.cerrarSesion)
@@ -69,17 +150,36 @@ class MainActivity : AppCompatActivity() {
         val sesion = getSesion()
 
         if (sesion != null) {
-            nombreUsuario.setText(sesion.usuario.nombre.toString())
-            cerrarSesionItem.setOnMenuItemClickListener {
-                cerrarSesion()
-                true
-            }
-            lugaresRegistrados.setOnMenuItemClickListener {
-                val correoSesion = getSesion()?.usuario?.email
-                val intent = Intent(this, Lugares_registrados_activity::class.java)
-                intent.putExtra("email", correoSesion)
-                startActivity(intent)
-                true
+
+            if(sesion.usuario is Moderador){
+
+                lugaresRegistrados.setTitle("Lugares por autorizar")
+                nombreUsuario.setText(sesion.usuario.nombre.toString())
+                cerrarSesionItem.setOnMenuItemClickListener {
+                    cerrarSesion()
+                    true
+                }
+                lugaresRegistrados.setOnMenuItemClickListener {
+                    val correoSesion = getSesion()?.usuario?.email
+                    val intent = Intent(this, Lugares_registrados_activity::class.java)
+                    intent.putExtra("email", correoSesion)
+                    startActivity(intent)
+                    true
+                }
+
+            }else{
+                nombreUsuario.setText(sesion.usuario.nombre.toString())
+                cerrarSesionItem.setOnMenuItemClickListener {
+                    cerrarSesion()
+                    true
+                }
+                lugaresRegistrados.setOnMenuItemClickListener {
+                    val correoSesion = getSesion()?.usuario?.email
+                    val intent = Intent(this, Lugares_registrados_activity::class.java)
+                    intent.putExtra("email", correoSesion)
+                    startActivity(intent)
+                    true
+                }
             }
 
         } else {
@@ -115,7 +215,6 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
-
     private fun getSesion(): Sesion? {
         val emailSesion = intent.getStringExtra("email")
         val listaSesiones = ArraySesiones.getInstance().myArrayList
@@ -127,16 +226,6 @@ class MainActivity : AppCompatActivity() {
     private fun reiniciarActivity() {
         finish()
         startActivity(intent)
-    }
-
-
-    private fun buscarLugar(): Lugar? {
-        val nombreLugar = intent.getStringExtra("nombreLugar")
-        val listaLugares = ArrayLugares.getInstance().myArrayList
-        val lugar = listaLugares.find { Lugar ->
-            Lugar.nombre.equals(nombreLugar)
-        }
-        return lugar
     }
 
     fun irAlRegistro() {
