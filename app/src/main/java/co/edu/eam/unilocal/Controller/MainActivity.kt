@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -42,19 +43,21 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         verificarSesion(navView.menu, navView)
-        cargarDatos()
+
+        val size = getSesion()?.usuario?.lugaresRegistrados?.size
+        Toast.makeText(this, size.toString(), Toast.LENGTH_SHORT)
+            .show()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main2_drawer, menu)
         return true
     }
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-
     fun verificarSesion(menu: Menu, menuLateral: NavigationView) {
 
         val cerrarSesionItem = menu.findItem(R.id.cerrarSesion)
@@ -71,6 +74,14 @@ class MainActivity : AppCompatActivity() {
                 cerrarSesion()
                 true
             }
+            lugaresRegistrados.setOnMenuItemClickListener {
+                val correoSesion = getSesion()?.usuario?.email
+                val intent = Intent(this, Lugares_registrados_activity::class.java)
+                intent.putExtra("email", correoSesion)
+                startActivity(intent)
+                true
+            }
+
         } else {
             lugaresRegistrados.setVisible(false)
             nombreUsuario?.setText("Inicia sesión para acceder a todas las funciones")
@@ -104,18 +115,6 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun buscarUsuario(): Usuario? {
-        val email = intent.getStringExtra("email")
-        val listaUsuarios = ArrayUsuario.getInstance().myArrayList
-        val usuario = listaUsuarios.find { Usuario ->
-            Usuario.email.equals(email)
-        }
-        if (usuario == null || email == null) {
-            return null
-        } else {
-            return usuario
-        }
-    }
 
     private fun getSesion(): Sesion? {
         val emailSesion = intent.getStringExtra("email")
@@ -125,22 +124,11 @@ class MainActivity : AppCompatActivity() {
         }
         return sesion
     }
-
     private fun reiniciarActivity() {
         finish()
         startActivity(intent)
     }
 
-    private fun cargarDatos(){
-        val sesion = getSesion()
-        val lugares = sesion?.usuario?.lugaresRegistrados
-        val fotosLugares = lugares?.get(0)?.fotos?.get(0)
-        val foto1 = findViewById<ImageView>(R.id.image1Place)
-
-        if(foto1!=null && fotosLugares!=null && lugares!=null && sesion!=null){
-            foto1.setImageURI(fotosLugares)
-        }
-    }
 
     private fun buscarLugar(): Lugar? {
         val nombreLugar = intent.getStringExtra("nombreLugar")
@@ -169,8 +157,9 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("email", correo)
             startActivity(intent)
         } else {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            irAlLogin()
         }
     }
 }
+
+

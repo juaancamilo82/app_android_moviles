@@ -41,7 +41,6 @@ class CrearLugar : AppCompatActivity() {
         seleccionarImagen3()
 
         }
-
     fun seleccionarImagen1() {
         val btnSubirFoto = findViewById<ImageView>(R.id.btnSubFoto1)
         btnSubirFoto.setOnClickListener{
@@ -144,7 +143,6 @@ class CrearLugar : AppCompatActivity() {
                  telStr.toLong(), correoUsuario,
                  false,listaImagenes
              )
-
              lugares.add(nuevoLugar)
              editarLugaresRegistrados(nuevoLugar)
              Toast.makeText(this, "Lugar registrado con éxito", Toast.LENGTH_SHORT)
@@ -166,23 +164,15 @@ class CrearLugar : AppCompatActivity() {
          val usuario = listaUsuarios.find { Usuario ->
              Usuario.email.equals(email)
          }
-         if(usuario!=null){
-             return usuario
+         return if(usuario!=null){
+             usuario
          }else{
-             return null
+             null
          }
      }
     private fun editarLugaresRegistrados(lugar: Lugar) {
         val usuario = buscarUsuario()
-        val listaLugares = usuario?.lugaresRegistrados
-        listaLugares?.let {
-                val indice = listaLugares.indexOf(lugar)
-                if (indice != -1) {
-                    listaLugares.set(indice+1, lugar)
-                }else{
-                    listaLugares.set(0, lugar)
-                }
-        }
+        usuario?.agregarLugarRegistrado(lugar)
     }
     private fun abrirMain(){
         val usuario = buscarUsuario()

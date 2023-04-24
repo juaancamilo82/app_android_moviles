@@ -36,20 +36,12 @@ class LoginActivity : AppCompatActivity() {
                     val listaSesiones = ArraySesiones.getInstance().myArrayList
                     val sesion = Sesion(usuario)
                     listaSesiones.add(sesion)
+                        val lugar = buscarLugar()
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra("email", usuario.email.toString())
+                        intent.putExtra("nombreLugar", lugar?.nombre.toString())
+                        startActivity(intent)
 
-                    if(usuario is Moderador){
-                        val lugar = buscarLugar()
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra("email", usuario.email.toString())
-                        intent.putExtra("nombreLugar", lugar?.nombre.toString())
-                        startActivity(intent)
-                    }else{
-                        val lugar = buscarLugar()
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.putExtra("email", usuario.email.toString())
-                        intent.putExtra("nombreLugar", lugar?.nombre.toString())
-                        startActivity(intent)
-                    }
                 }else{
                     Toast.makeText(this, "No se encontró el usuario", Toast.LENGTH_SHORT).show()
                 }

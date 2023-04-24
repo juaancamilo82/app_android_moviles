@@ -9,5 +9,12 @@ open class Usuario (nombre: String, email:String, password:String, lugaresRegist
     var lugaresRegistrados: ArrayList<Lugar>? = lugaresRegistrados
     var lugaresGuardados: ArrayList<Lugar>? = lugaresGuardados
     var lugaresFavoritos: ArrayList<Lugar>? = lugaresFavoritos
+
+    fun agregarLugarRegistrado(lugar: Lugar) {
+        if (lugaresRegistrados == null) {
+            lugaresRegistrados = ArrayList()
+        }
+        lugaresRegistrados?.add(lugar)
+    }
 }
 
