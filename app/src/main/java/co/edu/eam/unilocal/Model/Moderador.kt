@@ -6,7 +6,8 @@ import co.edu.eam.unilocal.Model.Usuario
 class Moderador(nombre: String, email: String, password: String, lugaresRegistrados: ArrayList<Lugar>?,
                 lugaresGuardados: ArrayList<Lugar>?, lugaresFavoritos: ArrayList<Lugar>?,
                 codigoModerador: Long, lugaresAprobados: ArrayList<Lugar>?, lugaresReprobados: ArrayList<Lugar>?)
-    : Usuario(nombre, email, password, lugaresRegistrados, lugaresGuardados, lugaresFavoritos) {
+
+    : Usuario(nombre, email, password, lugaresRegistrados, lugaresGuardados, lugaresFavoritos, fotoPerfil = null) {
 
     var codigoModerador: Long = codigoModerador
     var lugaresAprobados: ArrayList<Lugar>? = lugaresAprobados

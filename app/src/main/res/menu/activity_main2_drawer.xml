@@ -5,11 +5,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/baseline_home_24"
-            android:title="@string/menu_home"/>
-        <item
-            android:id="@+id/editarPerfil"
+            android:id="@+id/editarPerfilItem"
             android:icon="@drawable/baseline_settings_24"
             android:title="Configuración del perfil"
             />

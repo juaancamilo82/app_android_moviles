@@ -3,22 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation2"
-    app:startDestination="@+id/nav_home">
-
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="co.edu.eam.unilocal.View.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home"/>
+    app:startDestination="@+id/editarPerfil">
 
     <fragment
         android:id="@+id/editarPerfil"
-        android:name="co.edu.eam.unilocal.View.gallery.GalleryFragment"
+        android:name="co.edu.eam.unilocal.View.ConfiguracionPerfil.ConfiguracionPerfilFragment"
         android:label="Configuración del perfil" />
 
     <fragment
         android:id="@+id/lugaresRegistrados"
-        android:name="co.edu.eam.unilocal.View.lugaresRegistrados.lugaresRegistradosFragment"
+        android:name="co.edu.eam.unilocal.View.LugaresRegistrados.LugaresRegistradosFragment"
         android:label="Lugares registrados"
         tools:layout="@layout/fragment_lugares_registrados" />
 

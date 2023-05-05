@@ -1,20 +1,25 @@
 package co.edu.eam.unilocal.Controller
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import co.edu.eam.unilocal.Model.ArrayUsuario
 import co.edu.eam.unilocal.R
 import co.edu.eam.unilocal.Model.Usuario
-import com.google.android.material.textfield.TextInputEditText
 
 class RegisroActivity : AppCompatActivity() {
 
@@ -22,10 +27,12 @@ class RegisroActivity : AppCompatActivity() {
     private lateinit var editTextPassword: EditText
     private val validationHandler = Handler(Looper.getMainLooper())
     private var validationRunnable: Runnable? = null
+    private lateinit var selectedImageUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_regisro)
+
         editTextEmail = findViewById(R.id.emailLR)
         editTextEmail.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -72,6 +79,8 @@ class RegisroActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        seleccionarImagen()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -79,17 +88,43 @@ class RegisroActivity : AppCompatActivity() {
         validationHandler.removeCallbacksAndMessages(null)
         validationRunnable = null
     }
-    fun irAlLogin(v: View) { //Función para abrir otra actividad
+
+    fun seleccionarImagen() {
+        val btnSubirFoto =findViewById<Button>(R.id.btnSubirFotoPerfil)
+        btnSubirFoto.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            selectImageLauncher.launch(intent)
+        }
+    }
+
+
+    private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val imageUri: Uri? = data?.data
+            if (imageUri != null) {
+                // guardar la URI de la imagen seleccionada en tu variable selectedImageUri
+                selectedImageUri = imageUri
+                // cargar la imagen desde la URI y establecerla en tu ImageView
+                val imageView = findViewById<ImageView>(R.id.fotoPerfilId)
+                imageView.setImageURI(imageUri)
+            }
+        }
+    }
+
+    fun irAlLogin() { //Función para abrir otra actividad
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
     fun registrarUsuario(v: View) {
         val usuarios = ArrayUsuario.getInstance().myArrayList
 
-        val nombre: TextInputEditText = findViewById(R.id.nombres)
-        val email: TextInputEditText = findViewById(R.id.emailLR)
-        val password: TextInputEditText = findViewById(R.id.passR)
-        val confirmP: TextInputEditText = findViewById(R.id.confirmPass)
+        val nombre: EditText = findViewById(R.id.nombres)
+        val email: EditText = findViewById(R.id.emailLR)
+        val password: EditText = findViewById(R.id.passR)
+        val confirmP: EditText = findViewById(R.id.confirmPass)
+        val image = selectedImageUri
+
         if (nombre.text.toString().isNotEmpty() && email.text.toString()
                 .isNotEmpty() && password.text.toString().isNotEmpty() && confirmP.text.toString()
                 .isNotEmpty()
@@ -104,19 +139,21 @@ class RegisroActivity : AppCompatActivity() {
                                 password.text.toString(),
                                 null,
                                 null,
-                                null
+                                null,
+                                image
                             )
                             usuarios.add(nuevoUsuario)
                             Toast.makeText(this, "Usuario registrado con éxito", Toast.LENGTH_SHORT)
                                 .show()
-                            val intent = Intent(this, LoginActivity::class.java)
-                            startActivity(intent)
+                            irAlLogin()
+
                         }else{
                             Toast.makeText(
                                 this@RegisroActivity,
                                 "Ya existe un usuario registrado con el email ingresado",
                                 Toast.LENGTH_SHORT
                             ).show()
+
                         }
                     } else {
                         Toast.makeText(

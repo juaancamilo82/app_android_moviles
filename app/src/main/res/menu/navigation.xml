@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/HomeFrag"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Home"
+        />
+
+    <item
+        android:id="@+id/agregarLugarFrag"
+        android:icon="@drawable/baseline_add_circle_24"
+        android:title="Agregar lugar"
+        />
+
+    <item
+        android:id="@+id/lugaresFavoritosFrag"
+        android:icon="@drawable/baseline_favorite_24"
+        android:title="Favoritos"
+        />
+
+    <item
+        android:id="@+id/lugaresGuardados"
+        android:icon="@drawable/baseline_bookmark_24"
+        android:title="Guardados"
+        />
+
+</menu>

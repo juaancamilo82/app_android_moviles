@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.RegistroLugar.RegistroLugarFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearlayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:paddingTop="60dp"
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Agregar lugar"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="367dp"
+                android:layout_height="39dp"
+                android:text="Proporciona información acerca de este lugar para ser mostrado publicamente en el mapa"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/nombreLugar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre del Lugar"
+                android:textSize="16sp"
+                android:paddingTop="20dp"/>
+
+            <EditText
+                android:id="@+id/numeroTelefonoLugar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de Teléfono"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/horarioLugar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Horario de Apertura"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/direccionLugar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Dirección"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/categoriaLugar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Categoría"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/referenciaLugar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Referencia de Dirección"
+                android:textSize="16sp"/>
+
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Sube algunas fotos del lugar"
+                app:layout_constraintBottom_toTopOf="@+id/btnSubFoto1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.068"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="0.0"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearlayout1"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="30dp">
+
+            <ImageView
+                android:id="@+id/btnSubFoto1"
+                android:layout_width="120dp"
+                android:layout_height="110dp"
+                app:layout_constraintHorizontal_bias="0.279"
+                app:layout_constraintStart_toEndOf="@+id/btnSubFoto2"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/baseline_cloud_upload_24"
+                />
+
+            <ImageView
+                android:id="@+id/btnSubFoto2"
+                android:layout_width="120dp"
+                android:layout_height="110dp"
+                app:layout_constraintBottom_toTopOf="@+id/btnRegistrarLugar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/baseline_cloud_upload_24"
+               />
+
+
+            <ImageView
+                android:id="@+id/btnSubFoto3"
+                android:layout_width="120dp"
+                android:layout_height="110dp"
+                app:layout_constraintBottom_toTopOf="@+id/btnRegistrarLugar"
+                app:layout_constraintStart_toEndOf="@+id/btnSubFoto1"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/baseline_cloud_upload_24"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:paddingBottom="50dp">
+
+        <Button
+            android:id="@+id/btnRegistrarLugar"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:backgroundTint="#E8DEF8"
+            android:backgroundTintMode="add"
+            android:foregroundTint="#000000"
+            android:inputType="textEmailAddress"
+            android:onClick="registerPlace"
+            android:text="Registrar lugar"
+            android:textAllCaps="false"
+            android:textColor="#000000"
+            app:iconTint="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:rippleColor="#E8DEF8"
+            app:strokeColor="#000000"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:textSize="18sp"/>
+
+
+
+</RelativeLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

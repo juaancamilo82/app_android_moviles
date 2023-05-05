@@ -1,6 +1,7 @@
 package co.edu.eam.unilocal.Controller
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -19,139 +20,191 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import co.edu.eam.unilocal.Model.*
 import co.edu.eam.unilocal.R
-import co.edu.eam.unilocal.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.w3c.dom.Text
+import android.view.MenuItem
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
+import co.edu.eam.unilocal.View.RegistroLugar.RegistroLugarFragment
+import co.edu.eam.unilocal.View.home.HomeFragment
+import co.edu.eam.unilocal.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var email: String
+    private lateinit var crudController: CrudController
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var registroLugarFragment: RegistroLugarFragment
     private var posicionActual = 0
+    lateinit var navegation: BottomNavigationView
+
+    private val mOnNavMenu = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        // Lógica para manejar los elementos seleccionados en el menú inferior
+        when (item.itemId) {
+            R.id.agregarLugarFrag -> {
+                /* if (crudController.searchSesion(email) == null) {
+                    irAlLogin()
+                } else {*/
+
+                val slideInAnim = if (isHomeFragmentVisible()) {
+                    R.animator.slide_in
+                } else {
+                    R.animator.slide_in_reverse
+                }
+                val slideOutAnim = if (isHomeFragmentVisible()) {
+                    R.animator.slide_out
+                } else {
+                    R.animator.slide_out_reverse
+                }
+
+                supportFragmentManager.commit {
+                    setCustomAnimations(slideInAnim, slideOutAnim)
+                    replace<RegistroLugarFragment>(R.id.frameContainer)
+                    setReorderingAllowed(true)
+                    addToBackStack("replacement")
+                }
+                return@OnNavigationItemSelectedListener true
+            }
+            //}
+
+            R.id.HomeFrag -> {
+                if (crudController.searchSesion(email) == null) {
+                    val fragment = HomeFragment()
+
+                    val slideInAnim = if (isHomeFragmentVisible()) {
+                        R.animator.slide_in
+                    } else {
+                        R.animator.slide_in_reverse
+                    }
+                    val slideOutAnim = if (isHomeFragmentVisible()) {
+                        R.animator.slide_out
+                    } else {
+                        R.animator.slide_out_reverse
+                    }
+
+
+                   supportFragmentManager.commit {
+                        setCustomAnimations(slideInAnim, slideOutAnim)
+                        replace(R.id.frameContainer, fragment)
+                        setReorderingAllowed(true)
+                        addToBackStack("replacement")
+                    }
+
+
+                    return@OnNavigationItemSelectedListener true
+                } else {
+                    val fragment = HomeFragment()
+                    val bundle = Bundle()
+                    bundle.putString("email", email)
+                    fragment.arguments = bundle
+
+                    val slideInAnim = if (isHomeFragmentVisible()) {
+                        R.animator.slide_in
+                    } else {
+                        R.animator.slide_in_reverse
+                    }
+                    val slideOutAnim = if (isHomeFragmentVisible()) {
+                        R.animator.slide_out
+                    } else {
+                        R.animator.slide_out_reverse
+                    }
+
+                    supportFragmentManager.commit {
+                        setCustomAnimations(slideInAnim, slideOutAnim)
+                        replace(R.id.frameContainer, fragment)
+                        setReorderingAllowed(true)
+                        addToBackStack("replacement")
+                    }
+
+                    return@OnNavigationItemSelectedListener true
+                }
+            }
+        }
+        false
+    }
+
+    private fun isHomeFragmentVisible(): Boolean {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.frameContainer)
+        return currentFragment is HomeFragment
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        email = intent.getStringExtra("email").toString()
+        crudController = CrudController()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.appBarMain.toolbar)
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.editarPerfil, R.id.lugaresRegistrados, R.id.cerrarSesion
+            setOf(R.id.editarPerfil, R.id.lugaresRegistrados, R.id.cerrarSesion
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        verificarSesion(navView.menu, navView)
+        navegation = findViewById(R.id.navMenuInf)
+        navegation.setOnNavigationItemSelectedListener(mOnNavMenu)
 
-        cargarElementos(posicionActual)
+       if (crudController.searchSesion(email) == null) {
+            val fragment = HomeFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out, R.animator.slide_in_reverse,
+                R.animator.slide_out_reverse)
+            transaction.replace(R.id.frameContainer, fragment)
+            transaction.setReorderingAllowed(true)
+            transaction.addToBackStack("replacement")
+            transaction.commit()
+        } else {
+            val fragment = HomeFragment()
+            val bundle = Bundle()
+            bundle.putString("email", email)
+            fragment.arguments = bundle
 
-    }
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.animator.slide_in, R.animator.slide_out, R.animator.slide_in_reverse,
+                R.animator.slide_out_reverse)
+            transaction.replace(R.id.frameContainer, fragment)
+            transaction.setReorderingAllowed(true)
+            transaction.addToBackStack("replacement")
+            transaction.commit()
+        }
+
+
+            homeFragment = HomeFragment()
+            registroLugarFragment = RegistroLugarFragment()
+
+            verificarSesion(navView.menu, navView)
+
+        }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main2_drawer, menu)
         return true
     }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun cargarElementos(indice:Int) {
-
-        val listaLugares = ArrayLugaresAutorizados.getInstance().myArrayList
-        val size = listaLugares.size
-        val img1 = findViewById<ImageView>(R.id.imgLugar1)
-        val img2 = findViewById<ImageView>(R.id.imgLugar2)
-        val img3 = findViewById<ImageView>(R.id.imgLugar3)
-        val btnSiguiente = findViewById<ImageView>(R.id.btnNext)
-        val btnAnterior = findViewById<ImageView>(R.id.btnBefore)
-        val nombreLugarTxt = findViewById<TextView>(R.id.nombretxtlugar)
-
-        if (size == 0) {
-            img1.setVisibility(View.GONE)
-            img2.setVisibility(View.GONE)
-            img3.setVisibility(View.GONE)
-            btnSiguiente.setVisibility(View.GONE)
-            nombreLugarTxt.setVisibility(View.GONE)
-            btnAnterior.setVisibility(View.GONE)
-
-        } else {
-                val imgUri1 = listaLugares.get(indice)?.fotos?.get(0)
-                val imgUri2 = listaLugares.get(indice)?.fotos?.get(1)
-                val imgUri3 = listaLugares.get(indice)?.fotos?.get(2)
-                val nombreLugar = listaLugares.get(indice)?.nombre
-                img1.setImageURI(imgUri1)
-                img2.setImageURI(imgUri2)
-                img3.setImageURI(imgUri3)
-                nombreLugarTxt.setText(nombreLugar.toString())
-        }
-    }
-    private fun getLugarAutorizado(): Lugar? {
-        val nombre = ArrayLugaresAutorizados.getInstance().myArrayList.get(posicionActual).nombre
-        val listaLugaresAutorizados = ArrayLugaresAutorizados.getInstance().myArrayList
-        val lugarAutorizado = listaLugaresAutorizados.find { LugaresAutorizados ->
-            LugaresAutorizados.nombre.equals(nombre)
-        }
-        return if(lugarAutorizado!=null){
-            lugarAutorizado
-        }else{
-            null
-        }
-    }
-    fun abrirInfoLugar(V: View){
-        val lugar = getLugarAutorizado()
-        val email = getSesion()?.usuario?.email
-        val indice = posicionActual
-        if(lugar!=null){
-            val intent = Intent(this, Info_Lugar_Activity::class.java)
-            val nombre = lugar?.nombre.toString()
-            intent.putExtra("nombreLugar", nombre)
-            intent.putExtra("email", email)
-            intent.putExtra("indice", indice)
-
-
-            startActivity(intent)
-        }
-    }
-
-    fun lugarSiguiente2(V: View) {
-
-        val listaLugares =  ArrayLugaresAutorizados.getInstance().myArrayList
-        val size = listaLugares.size
-
-        if (size != null && size > 1) {
-            posicionActual = (posicionActual + 1) % size
-            cargarElementos(posicionActual)
-        }
-    }
-
-    fun lugarAnterior2(V: View) {
-
-        val listaLugares =  ArrayLugaresAutorizados.getInstance().myArrayList
-        val size = listaLugares.size
-
-        if (size != null && size > 1) {
-            posicionActual = (posicionActual - 1 + size) % size
-            cargarElementos(posicionActual)
-        }
-    }
 
     fun verificarSesion(menu: Menu, menuLateral: NavigationView) {
 
+        val imagenPerfil = menuLateral.getHeaderView(0).findViewById<ImageView>(R.id.fotoPerfilIdLateral)
         val cerrarSesionItem = menu.findItem(R.id.cerrarSesion)
-        val LogOrHome = menu.findItem(R.id.nav_home)
-        val editOrRegister = menu.findItem(R.id.editarPerfil)
+        val editOrRegister = menu.findItem(R.id.editarPerfilItem)
         val lugaresRegistrados = menu.findItem(R.id.lugaresRegistrados)
         val nombreUsuario =
             menuLateral.getHeaderView(0).findViewById<TextView>(R.id.txtNombreUsuario)
-        val sesion = getSesion()
+        val sesion = crudController.searchSesion(email)
 
         if (sesion != null) {
 
-            if(sesion.usuario is Moderador){
+            if (sesion.usuario is Moderador) {
 
                 lugaresRegistrados.setTitle("Lugares por autorizar")
                 nombreUsuario.setText(sesion.usuario.nombre.toString())
@@ -160,21 +213,22 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 lugaresRegistrados.setOnMenuItemClickListener {
-                    val correoSesion = getSesion()?.usuario?.email
+                    val correoSesion = sesion?.usuario?.email
                     val intent = Intent(this, Lugares_registrados_activity::class.java)
                     intent.putExtra("email", correoSesion)
                     startActivity(intent)
                     true
                 }
 
-            }else{
+            } else {
+                imagenPerfil.setImageURI(sesion.usuario.fotoPerfil)
                 nombreUsuario.setText(sesion.usuario.nombre.toString())
                 cerrarSesionItem.setOnMenuItemClickListener {
                     cerrarSesion()
                     true
                 }
                 lugaresRegistrados.setOnMenuItemClickListener {
-                    val correoSesion = getSesion()?.usuario?.email
+                    val correoSesion = sesion.usuario.email
                     val intent = Intent(this, Lugares_registrados_activity::class.java)
                     intent.putExtra("email", correoSesion)
                     startActivity(intent)
@@ -185,24 +239,24 @@ class MainActivity : AppCompatActivity() {
         } else {
             lugaresRegistrados.setVisible(false)
             nombreUsuario?.setText("Inicia sesión para acceder a todas las funciones")
-            LogOrHome?.setTitle("Iniciar sesión")
-            LogOrHome?.setOnMenuItemClickListener {
+            editOrRegister?.setTitle("Iniciar sesión")
+            editOrRegister?.setOnMenuItemClickListener {
                 irAlLogin()
                 true
             }
-            LogOrHome?.setIcon(R.drawable.baseline_login_24)
-            cerrarSesionItem?.setVisible(false)
-            editOrRegister?.setTitle("Registrarse")
-            editOrRegister.setOnMenuItemClickListener {
+            editOrRegister?.setIcon(R.drawable.baseline_login_24)
+            cerrarSesionItem?.setTitle("Registrarse")
+            cerrarSesionItem.setOnMenuItemClickListener {
                 irAlRegistro()
                 true
             }
-            editOrRegister.setIcon(R.drawable.baseline_post_add_24)
+            cerrarSesionItem.setIcon(R.drawable.baseline_post_add_24)
         }
     }
 
+
     private fun cerrarSesion() {
-        var sesion = getSesion()
+        val sesion = crudController.searchSesion(email)
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Confirmación")
         builder.setMessage("¿Estás seguro de que deseas cerrar sesión?")
@@ -215,14 +269,6 @@ class MainActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun getSesion(): Sesion? {
-        val emailSesion = intent.getStringExtra("email")
-        val listaSesiones = ArraySesiones.getInstance().myArrayList
-        val sesion = listaSesiones.find { Sesion ->
-            Sesion.usuario.email.equals(emailSesion)
-        }
-        return sesion
-    }
     private fun reiniciarActivity() {
         finish()
         startActivity(intent)
@@ -236,18 +282,6 @@ class MainActivity : AppCompatActivity() {
     fun irAlLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
-    }
-
-    fun abrirVentanaRegistroLugar(v: View) {
-        val sesion = getSesion()
-        if (sesion != null) {
-            val intent = Intent(this, CrearLugar::class.java)
-            val correo: String = sesion.usuario.email.toString()
-            intent.putExtra("email", correo)
-            startActivity(intent)
-        } else {
-            irAlLogin()
-        }
     }
 }
 
