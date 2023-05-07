@@ -10,12 +10,7 @@
             android:title="Configuración del perfil"
             />
         <item
-            android:id="@+id/lugaresRegistrados"
-            android:icon="@drawable/baseline_place_24"
-            android:title="Mis lugares registrados"
-            />
-        <item
-            android:id="@+id/cerrarSesion"
+            android:id="@+id/cerrarSesionItem"
             android:icon="@drawable/baseline_logout_24"
             android:title="Cerrar sesión"
             />

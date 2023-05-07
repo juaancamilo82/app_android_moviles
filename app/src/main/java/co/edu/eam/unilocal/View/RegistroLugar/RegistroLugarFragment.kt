@@ -56,6 +56,10 @@ class RegistroLugarFragment : Fragment() {
 
         root=rootView
 
+
+        Toast.makeText(requireContext(), "email: " + email, Toast.LENGTH_SHORT)
+            .show()
+
         registrarLugar()
 
         seleccionarImagen1()
@@ -131,13 +135,10 @@ class RegistroLugarFragment : Fragment() {
     }
 
     fun registrarLugar() {
-
         val btnRegistrar = root.findViewById<Button>(R.id.btnRegistrarLugar)
+        val lugares = ArrayLugares.getInstance().myArrayList
 
         btnRegistrar.setOnClickListener {
-
-            val lugares = ArrayLugares.getInstance().myArrayList
-
             val nombre = root.findViewById<EditText>(R.id.nombreLugar).text.toString()
             val categoria = root.findViewById<EditText>(R.id.categoriaLugar).text.toString()
             val direccion = root.findViewById<EditText>(R.id.direccionLugar).text.toString()
@@ -154,12 +155,17 @@ class RegistroLugarFragment : Fragment() {
                     val image2 = selectedImageUri2
                     val image3 = selectedImageUri3
 
-                    val listaImagenes = ArrayList(listOf(image1, image2, image3))
+                    val listaImagenesBytes = listOfNotNull(image1, image2, image3).mapNotNull { uri ->
+                        context?.contentResolver?.openInputStream(uri)?.buffered()?.use { input ->
+                            input.readBytes()
+                        }
+                    }
 
                     val nuevoLugar = Lugar(
                         nombre, categoria, direccion, referencia, horario, numeroTelefono,
-                        email, listaImagenes
+                        email, listaImagenesBytes
                     )
+
 
                     lugares.add(nuevoLugar)
 
@@ -170,17 +176,17 @@ class RegistroLugarFragment : Fragment() {
                         .show()
 
                     limpiarCampos()
-
                 } else {
                     Toast.makeText(requireContext(), "El lugar ya se encuentra registrado", Toast.LENGTH_SHORT)
                         .show()
                 }
-            }else{
+            } else {
                 Toast.makeText(requireContext(), "Debes llenar todos los campos", Toast.LENGTH_SHORT)
                     .show()
             }
         }
     }
+
 
     private fun estaDisponible(nombre: String):Boolean{
         val lugarRegistrado = crudController.searchLPlace(nombre)

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.MisLugares.MisLugaresFragment">
+
+
+    <RelativeLayout
+        android:id="@+id/MisLugaresRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textViewLugaresRegistrados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lugares registrados"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="16dp"/>
+
+        <HorizontalScrollView
+            android:id="@+id/scrollLugaresRegistrados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewLugaresRegistrados"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutLugaresRegistrados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+        <TextView
+            android:id="@+id/textViewLugaresFavoritos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lugares favoritos"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_below="@id/scrollLugaresRegistrados"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"/>
+
+        <HorizontalScrollView
+            android:id="@+id/scrollLugaresFavoritos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewLugaresFavoritos"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutLugaresFavoritos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/textViewLugaresGuardados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lugares guardados"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_below="@id/scrollLugaresFavoritos"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"/>
+
+        <HorizontalScrollView
+            android:id="@+id/scrollLugaresGuardados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewLugaresGuardados"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutLugaresGuardados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

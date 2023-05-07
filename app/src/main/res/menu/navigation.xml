@@ -12,17 +12,10 @@
         android:icon="@drawable/baseline_add_circle_24"
         android:title="Agregar lugar"
         />
-
     <item
-        android:id="@+id/lugaresFavoritosFrag"
-        android:icon="@drawable/baseline_favorite_24"
-        android:title="Favoritos"
-        />
-
-    <item
-        android:id="@+id/lugaresGuardados"
-        android:icon="@drawable/baseline_bookmark_24"
-        android:title="Guardados"
+        android:id="@+id/MisLugaresFrag"
+        android:icon="@drawable/baseline_place_24"
+        android:title="Mis lugares"
         />
 
 </menu>

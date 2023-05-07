@@ -17,9 +17,6 @@
             android:name=".Controller.Info_Lugar_Activity"
             android:exported="false" />
         <activity
-            android:name=".Controller.Lugares_registrados_activity"
-            android:exported="false" />
-        <activity
             android:name=".Controller.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"

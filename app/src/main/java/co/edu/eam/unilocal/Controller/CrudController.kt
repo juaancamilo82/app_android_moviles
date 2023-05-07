@@ -36,7 +36,6 @@ import co.edu.eam.unilocal.Model.*
          return sesion
      }
 
-
      fun searchAutoricedPlaceByPos(posicionActual: Int): Lugar? {
          val nombre = ArrayLugaresAutorizados.getInstance().myArrayList.get(posicionActual).nombre
          val listaLugaresAutorizados = ArrayLugaresAutorizados.getInstance().myArrayList

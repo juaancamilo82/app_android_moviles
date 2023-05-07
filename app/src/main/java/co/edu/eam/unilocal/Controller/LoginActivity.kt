@@ -1,5 +1,6 @@
 package co.edu.eam.unilocal.Controller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,13 +28,12 @@ class LoginActivity : AppCompatActivity() {
     }
     fun loguear(v: View) {
 
-
         val listaUsuarios = ArrayUsuario.getInstance().myArrayList
         val email = findViewById<EditText>(R.id.emailLogin).text.toString()
         val password = findViewById<EditText>(R.id.passLogin).text.toString()
 
         val usuario = listaUsuarios.find { Usuario ->
-            Usuario.email.equals(email) && Usuario.password.equals(password)
+            Usuario.email.equals(email, ignoreCase = true) && Usuario.password.equals(password)
         }
 
         if(usuario!=null){
@@ -51,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "No se encontró el usuario", Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun quemarInfo(){
 
         val usuarios = ArrayUsuario.getInstance().myArrayList

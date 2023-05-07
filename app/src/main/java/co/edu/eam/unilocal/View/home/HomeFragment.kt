@@ -2,6 +2,7 @@ package co.edu.eam.unilocal.View.home
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.media.Image
 import android.os.Bundle
@@ -27,7 +28,6 @@ class HomeFragment : Fragment() {
     private lateinit var crudController: CrudController
     private lateinit var email: String
     private lateinit var root: View
-
     companion object {
         fun newInstance(email: String): HomeFragment {
             val fragment = HomeFragment()
@@ -52,15 +52,12 @@ class HomeFragment : Fragment() {
 
         cargarElementos()
 
-
         return rootView
 
-
     }
-
     private fun cargarElementos() {
 
-        val listaLugares = ArrayLugares.getInstance().myArrayList
+        val listaLugares = ArrayLugaresAutorizados.getInstance().myArrayList
         val size = listaLugares.size
 
         if (size == 0) {
@@ -78,6 +75,7 @@ class HomeFragment : Fragment() {
 
             val scale1 = resources.displayMetrics.density
             val spacingPx = (spacingDp * scale1 + 0.5f).toInt()
+
 
             for (i in 0 until size) {
                 val parentLayout = RelativeLayout(requireContext())
@@ -120,8 +118,9 @@ class HomeFragment : Fragment() {
 
                 linearLayout.addView(parentLayout)
 
-                val newImageUri = listaLugares[i].fotos[0]
-                imageView.setImageURI(newImageUri)
+                val byteArray = listaLugares[i].fotos[0]
+                val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                imageView.setImageBitmap(bitmap)
                 imageView.setOnClickListener {
                     abrirInfoLugar(nombreLugar)
                 }
@@ -130,21 +129,16 @@ class HomeFragment : Fragment() {
                     scrollView.scrollTo(0, parentLayout.bottom)
                 }
             }
-
         }
     }
-        private fun abrirInfoLugar(nombre:String) {
-            val lugar = crudController.searchLPlace(nombre)
-            val indice = posicionActual
-            if (lugar != null) {
-                val intent = Intent(requireActivity(), Info_Lugar_Activity::class.java)
-                intent.putExtra("nombreLugar", nombre)
-                intent.putExtra("email", email)
-                intent.putExtra("indice", indice)
-                startActivity(intent)
-            }
-        }
 
+    private fun abrirInfoLugar(nombre:String) {
+        val intent = Intent(requireActivity(), Info_Lugar_Activity::class.java)
+        intent.putExtra("nombreLugar", nombre)
+        intent.putExtra("email", email)
+        startActivity(intent)
 
     }
+
+}
 

@@ -4,7 +4,8 @@ import android.net.Uri
 
 class Lugar(
     nombre: String, categoria: String, direccion: String, referencia: String, horario: String, numeroTelefono: String,
-    correoUsuario:String,  fotos:ArrayList<Uri>) {
+    correoUsuario: String, fotos: List<ByteArray>
+) {
 
     var nombre: String = nombre
     var categoria: String = categoria
@@ -13,9 +14,10 @@ class Lugar(
     var horario: String = horario
     var telefono: String = numeroTelefono
     var correoUsuario: String? = correoUsuario
-    var fotos:ArrayList<Uri> = fotos
+    var fotos: List<ByteArray> = fotos
 
 }
+
 
 
 

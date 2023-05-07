@@ -12,5 +12,19 @@ class Moderador(nombre: String, email: String, password: String, lugaresRegistra
     var codigoModerador: Long = codigoModerador
     var lugaresAprobados: ArrayList<Lugar>? = lugaresAprobados
     var lugaresReprobados: ArrayList<Lugar>? = lugaresReprobados
+
+    fun agregarLugarAListaAprobados(lugar: Lugar) {
+        if (lugaresAprobados == null) {
+            lugaresAprobados = ArrayList()
+        }
+        lugaresAprobados?.add(lugar)
+    }
+    fun agregarLugarAListaReprobados(lugar: Lugar) {
+        if (lugaresReprobados == null) {
+            lugaresReprobados = ArrayList()
+        }
+        lugaresReprobados?.add(lugar)
+    }
+
 }
 
