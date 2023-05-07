@@ -30,9 +30,9 @@ class Info_Lugar_Activity : AppCompatActivity() {
 
     private fun cargarDatos() {
 
-        val lugar = crudController.searchAutoricedPlace(nombreLugar)
-        val usuario = crudController.searchUser(email)
+        val lugar = crudController.searchLPlace(nombreLugar)
         val listaImagenes = lugar?.fotos
+        val usuario = crudController.searchUser(email)
 
         val txtNombre = findViewById<TextView>(R.id.infoNombreLugar)
         val txtCategoria = findViewById<TextView>(R.id.infoCategoria)
@@ -40,9 +40,6 @@ class Info_Lugar_Activity : AppCompatActivity() {
         val txtContacto = findViewById<TextView>(R.id.infoContacto)
         val txtDireccion = findViewById<TextView>(R.id.infoDirección)
         val txtReferencia = findViewById<TextView>(R.id.infoReferencia)
-
-        val btnAutorizar = findViewById<Button>(R.id.btnAutorizarLugar)
-        val btnRechazar = findViewById<Button>(R.id.btnRechazarLugar)
 
         txtNombre.setText(lugar?.nombre)
         txtCategoria.setText(lugar?.categoria)
@@ -54,97 +51,53 @@ class Info_Lugar_Activity : AppCompatActivity() {
         val linearLayout = findViewById<LinearLayout>(R.id.linearLayoutImgInfo)
         val scrollView = findViewById<HorizontalScrollView>(R.id.scrollIdInfo)
 
+        if (listaImagenes != null) {
+            if (usuario != null) {
+                generarScroll(listaImagenes, linearLayout, scrollView, usuario, lugar)
+            }
+        }
+        activarIconos(lugar,usuario)
+    }
+    private fun generarScroll(lista:List<ByteArray>,layout: LinearLayout, scrollView: HorizontalScrollView, usuario:Usuario, lugar: Lugar){
+
         val dpValue = 120 // Valor en dp
         val scale = resources.displayMetrics.density
         val pixelValue = (dpValue * scale + 0.5f).toInt()
-
         val spacingDp = 10
-
         val scale1 = resources.displayMetrics.density
         val spacingPx = (spacingDp * scale1 + 0.5f).toInt()
 
-        if (listaImagenes != null) {
-            for (i in 0 until listaImagenes.size) {
-                val parentLayout = RelativeLayout(this)
-                val parentLayoutParams = RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-                )
-                parentLayout.layoutParams = parentLayoutParams
+        for (i in 0 until lista.size) {
+            val parentLayout = RelativeLayout(this)
+            val parentLayoutParams = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
+            parentLayout.layoutParams = parentLayoutParams
 
-                val imageView = ImageView(this)
-                val layoutParams = RelativeLayout.LayoutParams(pixelValue, pixelValue)
-                imageView.layoutParams = layoutParams
-                layoutParams.setMargins(spacingPx, 0, 0, 0)
-                imageView.setPadding(8, 8, 8, 8)
-                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            val imageView = ImageView(this)
+            val layoutParams = RelativeLayout.LayoutParams(pixelValue, pixelValue)
+            imageView.layoutParams = layoutParams
+            layoutParams.setMargins(spacingPx, 0, 0, 0)
+            imageView.setPadding(8, 8, 8, 8)
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
 
-                val imageViewId = View.generateViewId()
-                imageView.id = imageViewId
+            val imageViewId = View.generateViewId()
+            imageView.id = imageViewId
 
-                parentLayout.addView(imageView)
+            parentLayout.addView(imageView)
 
-                linearLayout.addView(parentLayout)
+            layout.addView(parentLayout)
 
-                val byteArray = listaImagenes[i]
-                val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                imageView.setImageBitmap(bitmap)
+            val byteArray = lista[i]
+            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+            imageView.setImageBitmap(bitmap)
 
-                scrollView.post {
-                    scrollView.scrollTo(0, parentLayout.bottom)
-                }
+            scrollView.post {
+                scrollView.scrollTo(0, parentLayout.bottom)
             }
         }
-
-        if(usuario is Moderador){
-
-            btnAutorizar.setOnClickListener {
-                if (lugar != null) {
-                    autorizarLugar(lugar, usuario as Moderador)
-                }
-            }
-
-            btnRechazar.setOnClickListener {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("Confirmación")
-                builder.setMessage("¿Estás seguro de que deseas rechazar este lugar? no hay vuelta atrás")
-                builder.setPositiveButton("Sí") { dialog, which ->
-                    if (lugar != null) {
-                        rechazarLugar(lugar, usuario as Moderador)
-                    }
-                }
-                builder.setNegativeButton("No") { dialog, which ->
-                }
-                builder.show()
-            }
-
-        } else {
-        btnAutorizar.visibility = View.GONE
-        btnRechazar.visibility = View.GONE
-        }
-
-        activarIconos(lugar,usuario)
-
     }
-    private fun autorizarLugar(lugar:Lugar, moderador: Moderador){
-
-        val listaLugares = ArrayLugares.getInstance().myArrayList
-        val lugaresAutorizados = ArrayLugaresAutorizados.getInstance().myArrayList
-        lugaresAutorizados.add(lugar)
-        moderador.agregarLugarAListaAprobados(lugar)
-        val indice = listaLugares.indexOf(lugar)
-        listaLugares.removeAt(indice)
-        Toast.makeText(this, "Lugar autorizado con éxito", Toast.LENGTH_SHORT).show()
-    }
-    private fun rechazarLugar(lugar: Lugar, moderador:Moderador){
-
-        val listaLugares = ArrayLugares.getInstance().myArrayList
-        val indice = listaLugares.indexOf(lugar)
-        moderador.agregarLugarAListaReprobados(lugar)
-        listaLugares.removeAt(indice)
-        Toast.makeText(this, "Lugar rechazado con éxito", Toast.LENGTH_SHORT).show()
-    }
-
     private fun activarIconos(lugar: Lugar?, usuario: Usuario?){
 
         val indiceFavoritos = usuario?.lugaresFavoritos?.indexOf(lugar)

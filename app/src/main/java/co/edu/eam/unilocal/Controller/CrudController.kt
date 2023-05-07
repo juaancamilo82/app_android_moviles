@@ -20,13 +20,6 @@ import co.edu.eam.unilocal.Model.*
         return place
     }
 
-     fun searchAutoricedPlace(name: String): Lugar?{
-         val placeList = ArrayLugaresAutorizados.getInstance().myArrayList
-         val place = placeList.find { LugaresAutorizados ->
-             LugaresAutorizados.nombre.equals(name, ignoreCase = true)
-         }
-         return place
-     }
 
      fun searchSesion(email: String): Sesion? {
          val sesionList = ArraySesiones.getInstance().myArrayList
@@ -35,16 +28,6 @@ import co.edu.eam.unilocal.Model.*
          }
          return sesion
      }
-
-     fun searchAutoricedPlaceByPos(posicionActual: Int): Lugar? {
-         val nombre = ArrayLugaresAutorizados.getInstance().myArrayList.get(posicionActual).nombre
-         val listaLugaresAutorizados = ArrayLugaresAutorizados.getInstance().myArrayList
-         val lugarAutorizado = listaLugaresAutorizados.find { LugaresAutorizados ->
-             LugaresAutorizados.nombre.equals(nombre, ignoreCase = true)
-         }
-         return lugarAutorizado
-     }
-
 
      fun eliminarLugarRegistrado(indice: Int, listaLugares: ArrayList<Lugar>, lugaresAutorizados: ArrayList<Lugar>) {
          if (indice >= 0 && indice < listaLugares.size) {
@@ -71,9 +54,7 @@ import co.edu.eam.unilocal.Model.*
              usuario?.guardarLugar(lugar)
          }
      }
-
      fun eliminarLugarGuardado(lugar: Lugar?, usuario:Usuario?){
          usuario?.lugaresGuardados?.remove(lugar)
      }
-
 }

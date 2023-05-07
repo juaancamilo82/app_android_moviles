@@ -10,10 +10,5 @@
         android:name="co.edu.eam.unilocal.View.ConfiguracionPerfil.ConfiguracionPerfilFragment"
         android:label="Configuración del perfil" />
 
-    <fragment
-        android:id="@+id/lugaresRegistrados"
-        android:name="co.edu.eam.unilocal.View.LugaresRegistrados.LugaresRegistradosFragment"
-        android:label="Lugares registrados"
-        tools:layout="@layout/fragment_lugares_registrados" />
 
 </navigation>

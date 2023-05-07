@@ -133,6 +133,11 @@ class RegisroActivity : AppCompatActivity() {
                 if (isEmailValid(email.text.toString())) {
                     if (isPasswordValid(password.text.toString())) {
                         if(isEmpty(email.text.toString())){
+
+                            val imagenBytes: ByteArray? = this.contentResolver?.openInputStream(image)?.buffered()?.use { input ->
+                                input.readBytes()
+                            }
+
                             val nuevoUsuario = Usuario(
                                 nombre.text.toString(),
                                 email.text.toString(),
@@ -140,8 +145,9 @@ class RegisroActivity : AppCompatActivity() {
                                 null,
                                 null,
                                 null,
-                                image
+                                imagenBytes
                             )
+
                             usuarios.add(nuevoUsuario)
                             Toast.makeText(this, "Usuario registrado con éxito", Toast.LENGTH_SHORT)
                                 .show()

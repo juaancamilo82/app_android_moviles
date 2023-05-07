@@ -14,12 +14,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import co.edu.eam.unilocal.ARG_PARAM1
-import co.edu.eam.unilocal.ARG_PARAM2
 import co.edu.eam.unilocal.Controller.CrudController
-import co.edu.eam.unilocal.Controller.MainActivity
 import co.edu.eam.unilocal.Model.ArrayLugares
-import co.edu.eam.unilocal.Model.ArrayLugaresAutorizados
 import co.edu.eam.unilocal.Model.Lugar
 import co.edu.eam.unilocal.R
 import co.edu.eam.unilocal.View.home.HomeFragment
@@ -51,17 +47,10 @@ class RegistroLugarFragment : Fragment() {
 
         email =  arguments?.getString("email").toString()
         crudController = CrudController()
-
         val rootView = inflater.inflate(R.layout.fragment_registro_lugar, container, false)
-
         root=rootView
 
-
-        Toast.makeText(requireContext(), "email: " + email, Toast.LENGTH_SHORT)
-            .show()
-
         registrarLugar()
-
         seleccionarImagen1()
         seleccionarImagen2()
         seleccionarImagen3()
@@ -163,9 +152,8 @@ class RegistroLugarFragment : Fragment() {
 
                     val nuevoLugar = Lugar(
                         nombre, categoria, direccion, referencia, horario, numeroTelefono,
-                        email, listaImagenesBytes
+                        email, listaImagenesBytes, false
                     )
-
 
                     lugares.add(nuevoLugar)
 
@@ -189,11 +177,9 @@ class RegistroLugarFragment : Fragment() {
 
 
     private fun estaDisponible(nombre: String):Boolean{
-        val lugarRegistrado = crudController.searchLPlace(nombre)
-        val lugarAutorizado = crudController.searchAutoricedPlace(nombre)
-        return lugarRegistrado==null && lugarAutorizado==null
+        val lugar = crudController.searchLPlace(nombre)
+        return lugar==null
     }
-
     private fun limpiarCampos() {
         val nombreLugar = root.findViewById<EditText>(R.id.nombreLugar)
         val categoriaLugar = root.findViewById<EditText>(R.id.categoriaLugar)

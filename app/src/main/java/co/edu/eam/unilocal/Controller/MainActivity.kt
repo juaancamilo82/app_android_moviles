@@ -1,6 +1,7 @@
 package co.edu.eam.unilocal.Controller
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -126,9 +127,8 @@ class MainActivity : AppCompatActivity() {
 
             R.id.MisLugaresFrag -> {
                 if (crudController.searchSesion(email) == null) {
-                 // irAlLogin()
+                 irAlLogin()
                 } else {
-
                     val bundle = Bundle()
                     bundle.putString("email", email)
 
@@ -143,7 +143,6 @@ class MainActivity : AppCompatActivity() {
                         R.animator.slide_out_reverse
                     }
 
-
                     val misLugaresFrag = MisLugaresFragment()
                     misLugaresFrag.arguments = bundle
 
@@ -153,7 +152,6 @@ class MainActivity : AppCompatActivity() {
                         setReorderingAllowed(true)
                         addToBackStack("replacement")
                     }
-
                     return@OnNavigationItemSelectedListener true
                }
             }
@@ -208,32 +206,24 @@ class MainActivity : AppCompatActivity() {
            } else {
                R.animator.slide_out_reverse
            }
-
            supportFragmentManager.commit {
                setCustomAnimations(slideInAnim, slideOutAnim)
                replace(R.id.frameContainer, fragment)
                setReorderingAllowed(true)
                addToBackStack("replacement")
            }
-
         }
             registroLugarFragment = RegistroLugarFragment()
-
             verificarSesion(navView.menu, navView)
-
         }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main2_drawer, menu)
         return true
     }
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-
-
     fun verificarSesion(menu: Menu, menuLateral: NavigationView) {
 
         val imagenPerfil = menuLateral.getHeaderView(0).findViewById<ImageView>(R.id.fotoPerfilIdLateral)
@@ -253,7 +243,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
             } else {
-                imagenPerfil.setImageURI(sesion.usuario.fotoPerfil)
+                val byteArray = sesion.usuario.fotoPerfil
+                val bitmap = byteArray?.let { BitmapFactory.decodeByteArray(byteArray, 0, it.size) }
+                imagenPerfil.setImageBitmap(bitmap)
                 nombreUsuario.setText(sesion.usuario.nombre.toString())
                 cerrarSesionItem.setOnMenuItemClickListener {
                     cerrarSesion()

@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.*
 import co.edu.eam.unilocal.Controller.CrudController
 import co.edu.eam.unilocal.Controller.Info_Lugar_Activity
+import co.edu.eam.unilocal.Controller.infoLugarActivity_2
 import co.edu.eam.unilocal.Model.*
 import co.edu.eam.unilocal.R
 import co.edu.eam.unilocal.View.RegistroLugar.RegistroLugarFragment
@@ -24,7 +25,7 @@ class MisLugaresFragment : Fragment() {
 
     private lateinit var root: View
     private lateinit var email: String
-
+    private lateinit var crudController: CrudController
     companion object {
         fun newInstance(email: String): RegistroLugarFragment {
             val fragment = RegistroLugarFragment()
@@ -35,19 +36,17 @@ class MisLugaresFragment : Fragment() {
         }
     }
 
-
-    private lateinit var crudController: CrudController
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         email = arguments?.getString("email").toString()
         val rootView = inflater.inflate(R.layout.fragment_mis_lugares, container, false)
         root = rootView
         crudController = CrudController()
         cargarDatos(email)
+
         return root
     }
 
@@ -77,13 +76,13 @@ class MisLugaresFragment : Fragment() {
             textView2.setText("Lugares autorizados por ti")
             textView3.setText("Lugares reprobados por ti")
 
-            generarScroll(listaLugaresPendientes, linearLayoutLugaresRegistrados, scrollRegistrados)
+            generarScrollPendientes(listaLugaresPendientes, linearLayoutLugaresRegistrados, scrollRegistrados, usuario)
 
             if (listaAprobados != null) {
-                generarScroll(listaAprobados, linearLayoutLugaresFavoritos, scrollFavoritoss)
+                generarScroll(listaAprobados, linearLayoutLugaresFavoritos, scrollFavoritoss, usuario)
             }
             if (listaReprobados != null) {
-                generarScroll(listaReprobados, linearLayoutLugaresGuardados, scrollGuardados)
+                generarScroll(listaReprobados, linearLayoutLugaresGuardados, scrollGuardados, usuario)
             }
 
         } else {
@@ -93,18 +92,18 @@ class MisLugaresFragment : Fragment() {
             val lugaresGuardados = usuario?.lugaresGuardados
 
             if (lugaresRegistrados != null) {
-                generarScroll(lugaresRegistrados, linearLayoutLugaresRegistrados, scrollRegistrados)
+                generarScroll(lugaresRegistrados, linearLayoutLugaresRegistrados, scrollRegistrados, usuario)
             }
             if (lugaresFavoritos != null) {
-                generarScroll(lugaresFavoritos, linearLayoutLugaresFavoritos, scrollFavoritoss)
+                generarScroll(lugaresFavoritos, linearLayoutLugaresFavoritos, scrollFavoritoss, usuario)
             }
             if (lugaresGuardados != null) {
-                generarScroll(lugaresGuardados, linearLayoutLugaresGuardados, scrollGuardados)
+                generarScroll(lugaresGuardados, linearLayoutLugaresGuardados, scrollGuardados, usuario)
             }
         }
     }
 
-    private fun generarScroll(lista: ArrayList<Lugar>, layout: LinearLayout, scrollView: HorizontalScrollView){
+    private fun generarScroll(lista: ArrayList<Lugar>, layout: LinearLayout, scrollView: HorizontalScrollView, usuario: Usuario){
 
         val dpValue = 150 // Valor en dp
         val scale = resources.displayMetrics.density
@@ -142,19 +141,12 @@ class MisLugaresFragment : Fragment() {
                 textLayoutParams.addRule(
                     RelativeLayout.BELOW,
                     imageViewId
-                ) // Posicionar debajo de la imagen
-                textLayoutParams.setMargins(
-                    spacingPx,
-                    0,
-                    0,
-                    0
-                ) // Margen izquierdo igual al margen de la imagen
+                )
 
-                // Establecer estilo en negrita y tamaño de fuente
+                textLayoutParams.setMargins(
+                    spacingPx, 0, 0, 0)
                 textView.setTypeface(null, Typeface.NORMAL)
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-
-                // Establecer texto para el TextView
 
                 val nombreLugar = lista.get(i).nombre
                 textView.text = nombreLugar
@@ -169,7 +161,7 @@ class MisLugaresFragment : Fragment() {
                 imageView.setImageBitmap(bitmap)
 
                 imageView.setOnClickListener {
-                    abrirInfoLugar(nombreLugar)
+                    abrirInfoLugar(nombreLugar,usuario)
                 }
 
                 scrollView.post {
@@ -178,11 +170,88 @@ class MisLugaresFragment : Fragment() {
             }
     }
 
-    private fun abrirInfoLugar(nombre:String) {
-        val intent = Intent(requireActivity(), Info_Lugar_Activity::class.java)
+
+    private fun generarScrollPendientes(lista: ArrayList<Lugar>, layout: LinearLayout, scrollView: HorizontalScrollView, usuario: Usuario) {
+
+        val dpValue = 150 // Valor en dp
+        val scale = resources.displayMetrics.density
+        val pixelValue = (dpValue * scale + 0.5f).toInt()
+
+        val spacingDp = 20
+
+        val scale1 = resources.displayMetrics.density
+        val spacingPx = (spacingDp * scale1 + 0.5f).toInt()
+
+        for (i in 0 until lista.size) {
+
+            if (lista.get(i).estaAutorizado == false) {
+                val parentLayout = RelativeLayout(requireContext())
+                val parentLayoutParams = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+                )
+                parentLayout.layoutParams = parentLayoutParams
+
+                val imageView = ImageView(requireContext())
+                val layoutParams = RelativeLayout.LayoutParams(pixelValue, pixelValue)
+                imageView.layoutParams = layoutParams
+                layoutParams.setMargins(spacingPx, 0, 0, 0)
+                imageView.setPadding(8, 8, 8, 8)
+                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+
+                val imageViewId = View.generateViewId()
+                imageView.id = imageViewId
+
+                val textView = TextView(requireContext())
+                val textLayoutParams = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+                )
+                textLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT) // Alineación a la izquierda
+                textLayoutParams.addRule(
+                    RelativeLayout.BELOW,
+                    imageViewId
+                )
+
+                textLayoutParams.setMargins(
+                    spacingPx, 0, 0, 0)
+                textView.setTypeface(null, Typeface.NORMAL)
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+
+                val nombreLugar = lista.get(i).nombre
+                textView.text = nombreLugar
+
+                parentLayout.addView(imageView)
+                parentLayout.addView(textView, textLayoutParams)
+
+                layout.addView(parentLayout)
+
+                val byteArray = lista[i].fotos[0]
+                val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                imageView.setImageBitmap(bitmap)
+
+                imageView.setOnClickListener {
+                    abrirInfoLugar(nombreLugar,usuario)
+                }
+
+                scrollView.post {
+                    scrollView.scrollTo(0, parentLayout.bottom)
+                }
+            }
+            }
+
+        }
+    private fun abrirInfoLugar(nombre:String, usuario: Usuario) {
+
+        var intent: Intent
+
+        if(usuario is Moderador){
+            intent = Intent(requireActivity(), infoLugarActivity_2::class.java)
+        }else{
+            intent = Intent(requireActivity(), Info_Lugar_Activity::class.java)
+        }
         intent.putExtra("nombreLugar", nombre)
         intent.putExtra("email", email)
         startActivity(intent)
     }
-
 }
